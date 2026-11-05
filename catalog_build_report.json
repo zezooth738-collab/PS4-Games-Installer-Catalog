@@ -1,0 +1,7 @@
+{
+  "input_records": 0,
+  "output_packages": 0,
+  "errors": [],
+  "warnings": [],
+  "note": "HTTPS syntax validation does not prove a URL is downloadable, safe, licensed, or compatible."
+}
