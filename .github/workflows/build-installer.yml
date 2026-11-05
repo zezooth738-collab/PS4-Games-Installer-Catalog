@@ -1,1 +1,40 @@
 
+name: Build PS4 homebrew installer catalog
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'authorized_packages.json'
+      - 'tools/build_installer.py'
+      - '.github/workflows/build-installer.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate installer catalog
+        run: python tools/build_installer.py
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add installer_games.json catalog_build_report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update homebrew installer catalog"
+            git push
+          fi
+
